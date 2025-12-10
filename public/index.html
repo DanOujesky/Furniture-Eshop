@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>E-shop – Objednávka</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f3f3;
+            padding: 40px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #4CAF50;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e5ffe5;
+            border: 1px solid #76c776;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>E-shop objednávka</h2>
+
+    <label>Adresa obchodu:</label>
+    <input id="shopAddress" value="Praha 1">
+
+    <label>Adresa zákazníka:</label>
+    <input id="userAddress" value="Brno">
+
+    <label>Co chce zákazník (oddělit čárkou):</label>
+    <input id="items" value="skříň, stůl">
+
+    <button onclick="sendOrder()">Odeslat objednávku</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+async function sendOrder() {
+    const shopAddress = document.getElementById("shopAddress").value;
+    const userAddress = document.getElementById("userAddress").value;
+    const items = document.getElementById("items").value.split(",").map(x => x.trim());
+
+    const res = await fetch("http://localhost:3000/api/order/create", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+            shopAddress,
+            userAddress,
+            items
+        })
+    });
+
+    const data = await res.json();
+
+    const result = document.getElementById("result");
+
+    if (data.error) {
+        result.innerHTML = `<div class="result"><b>Chyba:</b> ${data.error}</div>`;
+        return;
+    }
+
+    result.innerHTML = `
+        <div class="result">
+            <h3>Objednávka vytvořena!</h3>
+            <p><b>Vzdálenost:</b> ${data.distance} km</p>
+            <p><b>Zvolené auto:</b> ${data.chosenCar.name}</p>
+        </div>
+    `;
+}
+</script>
+
+</body>
+</html>
