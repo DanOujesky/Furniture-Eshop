@@ -65,12 +65,12 @@ app.post("/order", (req, res) => {
   const order_id = crypto.randomUUID();
   const event_id = crypto.randomUUID();
 
-  fetch(`${COURIER_URL}${COURIER_PORT}/order`, {
+  fetch(`${COURIER_URL}:${COURIER_PORT}/order`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     order_id: order_id,
-    callbackUrl: `${ESHOP_URL}${ESHOP_PORT}/order/update`,
+    callbackUrl: `${ESHOP_URL}:${ESHOP_PORT}/order/update`,
     event_id: event_id,
     adress: order.adress,
     furniture: order.furniture
@@ -91,5 +91,5 @@ io.on("connection", (socket) => {
 });
 
 server.listen(ESHOP_PORT, () => {
-  console.log(`Server running at ${ESHOP_URL}${ESHOP_PORT}`);
+  console.log(`Server running at ${ESHOP_URL}:${ESHOP_PORT}`);
 });
