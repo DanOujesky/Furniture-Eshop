@@ -3,6 +3,7 @@ import http from "http";
 import { Server } from "socket.io";
 import crypto from "crypto";
 import dotenv from "dotenv";
+import { z } from "zod";
 
 dotenv.config();
 
@@ -18,6 +19,22 @@ const io = new Server(server, {
 const orders = new Map();
 const processedEvents = new Set();
 let adminSocket = null;
+
+const schema = z.object({
+  address: z.string().min(3),
+
+  furniture: z.object({
+    name: z.string().min(1),
+
+    dimensions: z.object({
+      width: z.number().positive(),
+      length: z.number().positive(),
+      height: z.number().positive(),
+    }),
+
+    weight: z.number().positive(),
+  }),
+});
 
 app.use(express.static("public"));
 
@@ -66,7 +83,12 @@ function handleWebhook(req, res) {
 }
 
 app.post("/order", async (req, res) => {
-  const order = req.body;
+  const validation = schema.safeParse(req.body);
+  if (!validation.success) {
+    return res.status(400).json({ error: validation.error.errors });
+  }
+  const { address, furniture } = validation.data;
+  console.log("Received order:", { address, furniture });
 
   const order_id = crypto.randomUUID();
   const event_id = crypto.randomUUID();
@@ -75,8 +97,8 @@ app.post("/order", async (req, res) => {
     order_id,
     event_id,
     callbackUrl: `${ESHOP_URL}:${ESHOP_PORT}/order/update`,
-    address: order.address,
-    furniture: order.furniture,
+    address: address,
+    furniture: furniture,
   };
 
   const signature = crypto
