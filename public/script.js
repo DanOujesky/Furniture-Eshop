@@ -26,28 +26,34 @@ const PRODUCTS = {
 const cartCountSpan = document.getElementById("cartCount");
 
 function updateCartCount() {
-  if (cartCountSpan) {
-    cartCountSpan.textContent = cart.length;
-  }
+  if (!cartCountSpan) return;
+
+  const totalCount = cart.reduce((sum, item) => sum + item.count, 0);
+  cartCountSpan.textContent = totalCount;
 }
 
 function addToCart(productName) {
   const baseProduct = PRODUCTS[productName];
   if (!baseProduct) return;
 
-  const product = {
-    name: baseProduct.name,
-    dimensions: {
-      width: baseProduct.dimensions.width,
-      length: baseProduct.dimensions.length,
-      height: baseProduct.dimensions.height
-    },
-    weight: baseProduct.weight
-  };
+  const existing = cart.find(item => item.name === productName);
 
-  cart.push(product);
+  if (existing) {
+    existing.count += 1;
+  } else {
+    cart.push({
+      name: baseProduct.name,
+      dimensions: {
+        width: baseProduct.dimensions.width,
+        length: baseProduct.dimensions.length,
+        height: baseProduct.dimensions.height
+      },
+      weight: baseProduct.weight,
+      count: 1
+    });
+  }
+
   localStorage.setItem("cart", JSON.stringify(cart));
-
   updateCartCount();
 }
 
@@ -65,7 +71,8 @@ function renderCart() {
       ${item.dimensions.width} ×
       ${item.dimensions.length} ×
       ${item.dimensions.height} cm<br>
-      ${item.weight} kg
+      ${item.weight} kg / kus<br>
+      Počet: <b>${item.count}</b>
     `;
     cartItemsDiv.appendChild(div);
   });
