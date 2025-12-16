@@ -2,7 +2,6 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import crypto from "crypto";
-import fetch from "node-fetch";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -45,7 +44,7 @@ function handleWebhook(req, res) {
       Buffer.from(expectedSignature)
     )
   ) {
-    console.log("❌ Invalid webhook signature");
+    console.log("Invalid webhook signature");
     return res.sendStatus(401);
   }
 
@@ -115,11 +114,11 @@ io.on("connection", (socket) => {
   console.log("✅ Admin connected:", socket.id);
 
   socket.on("disconnect", () => {
-    console.log("❌ Admin disconnected");
+    console.log("Admin disconnected");
     adminSocket = null;
   });
 });
 
 server.listen(ESHOP_PORT, () => {
-  console.log(`🟢 E-shop running at ${ESHOP_URL}:${ESHOP_PORT}`);
+  console.log(`E-shop running at ${ESHOP_URL}:${ESHOP_PORT}`);
 });

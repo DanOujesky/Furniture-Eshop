@@ -1,47 +1,210 @@
 <!DOCTYPE html>
 <html lang="cs">
-<head>
-    <meta charset="UTF-8">
-    <title>E-shop s nabytkem</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>E-shop – Nábytek</title>
 
+    <script src="/socket.io/socket.io.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f5f5f5;
+      }
+
+      header {
+        background: #222;
+        color: white;
+        padding: 15px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      button {
+        padding: 8px 14px;
+        cursor: pointer;
+      }
+
+      .container {
+        padding: 20px;
+      }
+
+      .products,
+      .cart {
+        display: none;
+      }
+
+      .product {
+        background: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 5px;
+      }
+
+      .cart-item {
+        background: white;
+        padding: 10px;
+        margin-bottom: 5px;
+      }
+
+      input {
+        padding: 6px;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .status {
+        margin-top: 20px;
+        padding: 10px;
+        background: #e3e3ff;
+      }
+    </style>
+  </head>
+
+  <body>
     <header>
-        <h1>Nabytek.cz</h1>
+      <div>E-shop – Nábytek</div>
+      <div>
+        <button onclick="showProducts()">Produkty</button>
+        <button onclick="showCart()">
+          Košík (<span id="cartCount">0</span>)
+        </button>
+      </div>
     </header>
 
-    <main class="products">
+    <div class="container">
+      <!-- PRODUKTY -->
+      <div class="products" id="products">
+        <h2>Produkty</h2>
 
         <div class="product">
-            <img src="img/stul.jpg" alt="Stul">
-            <h2>Dreveny styl</h2>
-            <p>Rozmery: 120 x 60 x 75 cm</p>
-            <p>Cena: 3490 Kc</p>
-            <button onclick="addToCart('Dreveny stul')">Pridat do kosiku</button>
+          <div>🪑 Židle</div>
+          <button onclick="addToCart('Židle')">Přidat</button>
         </div>
 
         <div class="product">
-            <img src="img/zidle.jpg" alt="Zidle">
-            <h2>Kuchynska zidle</h2>
-            <p>Rozměry: 45 x 40 x 90 cm</p>
-            <p>Cena: 990 Kc</p>
-            <button onclick="addToCart('Kuchynska zidle')">Pridat do kosiku</button>
+          <div>🛋️ Sedačka</div>
+          <button onclick="addToCart('Sedačka')">Přidat</button>
         </div>
 
         <div class="product">
-            <img src="img/police.jpg" alt="Police">
-            <h2>Nastenna police</h2>
-            <p>Rozměry: 80 x 20 cm</p>
-            <p>Cena: 590 Kc</p>
-            <button onclick="addToCart('Nastenna police')">Pridat do kosiku</button>
+          <div>🛏️ Postel</div>
+          <button onclick="addToCart('Postel')">Přidat</button>
         </div>
-          <a href="purchase.html" class="cart-btn">
-        🛒 Košík (<span id="cartCount">0</span>)
-        </a>
 
-    </main>
+        <div class="product">
+          <div>🪟 Skříň</div>
+          <button onclick="addToCart('Skříň')">Přidat</button>
+        </div>
+      </div>
 
-    <script src="script.js"></script>
-</body>
+      <!-- KOŠÍK -->
+      <div class="cart" id="cart">
+        <h2>Košík</h2>
+
+        <div id="cartItems"></div>
+
+        <h3>Doručovací adresa</h3>
+        <input id="address" placeholder="Ulice, město, PSČ" />
+
+        <button onclick="sendOrder()">Odeslat objednávku</button>
+
+        <div class="status" id="status"></div>
+      </div>
+    </div>
+
+    <script>
+      const productsDiv = document.getElementById("products");
+      const cartDiv = document.getElementById("cart");
+      const cartItemsDiv = document.getElementById("cartItems");
+      const cartCountSpan = document.getElementById("cartCount");
+      const statusDiv = document.getElementById("status");
+
+      const cart = [];
+      let currentOrderId = null;
+
+      /* =====================
+     SOCKET.IO
+  ===================== */
+      const socket = io();
+
+      socket.on("orderUpdate", (data) => {
+        if (data.order_id === currentOrderId) {
+          statusDiv.innerHTML += `<div>📦 Stav objednávky: <b>${data.status}</b></div>`;
+        }
+      });
+
+      /* =====================
+     UI FUNCTIONS
+  ===================== */
+      function showProducts() {
+        productsDiv.style.display = "block";
+        cartDiv.style.display = "none";
+      }
+
+      function showCart() {
+        productsDiv.style.display = "none";
+        cartDiv.style.display = "block";
+        renderCart();
+      }
+
+      function addToCart(item) {
+        cart.push(item);
+        cartCountSpan.textContent = cart.length;
+      }
+
+      function renderCart() {
+        cartItemsDiv.innerHTML = "";
+
+        cart.forEach((item, index) => {
+          const div = document.createElement("div");
+          div.className = "cart-item";
+          div.textContent = `${index + 1}. ${item}`;
+          cartItemsDiv.appendChild(div);
+        });
+      }
+
+      /* =====================
+     SEND ORDER
+  ===================== */
+      async function sendOrder() {
+        const address = document.getElementById("address").value;
+
+        if (!address || cart.length === 0) {
+          alert("Vyplň adresu a přidej produkty!");
+          return;
+        }
+
+        const payload = {
+          address,
+          furniture: cart,
+        };
+
+        statusDiv.innerHTML = "⏳ Odesílám objednávku...";
+
+        const res = await fetch("/order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        });
+
+        const data = await res.json();
+        currentOrderId = data.order_id;
+
+        statusDiv.innerHTML = `
+      ✅ Objednávka vytvořena<br>
+      ID: <b>${data.order_id}</b><br>
+      Čekám na kurýra...
+    `;
+      }
+
+      /* INIT */
+      showProducts();
+    </script>
+  </body>
 </html>
