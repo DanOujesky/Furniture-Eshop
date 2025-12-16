@@ -1,0 +1,19 @@
+<div class="container">
+    <h2>Váš košík</h2>
+
+    <ul id="cartItems" class="cart-list"></ul>
+
+    <h2>📦 Údaje zákazníka</h2>
+
+    <input id="firstName" placeholder="Jméno">
+    <input id="lastName" placeholder="Příjmení">
+    <input id="email" placeholder="Email">
+    <input id="userAddress" placeholder="Adresa">
+
+    <button onclick="sendOrder()">Odeslat objednávku</button>
+
+    <div id="status"></div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="app.js"></script>
