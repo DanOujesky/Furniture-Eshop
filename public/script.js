@@ -23,11 +23,32 @@ const PRODUCTS = {
   }
 };
 
+const cartCountSpan = document.getElementById("cartCount");
+
+function updateCartCount() {
+  if (cartCountSpan) {
+    cartCountSpan.textContent = cart.length;
+  }
+}
+
 function addToCart(productName) {
-  const product = PRODUCTS[productName];
+  const baseProduct = PRODUCTS[productName];
+  if (!baseProduct) return;
+
+  const product = {
+    name: baseProduct.name,
+    dimensions: {
+      width: baseProduct.dimensions.width,
+      length: baseProduct.dimensions.length,
+      height: baseProduct.dimensions.height
+    },
+    weight: baseProduct.weight
+  };
 
   cart.push(product);
   localStorage.setItem("cart", JSON.stringify(cart));
+
+  updateCartCount();
 }
 
 function renderCart() {
@@ -50,4 +71,5 @@ function renderCart() {
   });
 }
 
+updateCartCount();
 renderCart();
