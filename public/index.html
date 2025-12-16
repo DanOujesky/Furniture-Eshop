@@ -2,31 +2,46 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <title>E-shop Objednávka</title>
+    <title>E-shop s nabytkem</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="container">
-    <h2>E-shop objednávka</h2>
+    <header>
+        <h1>Nabytek.cz</h1>
+    </header>
 
-    <label>Jméno:</label>
-    <input value="">
+    <main class="products">
 
-    <label>Přijmeni:</label>
-    <input value="">
+        <div class="product">
+            <img src="img/stul.jpg" alt="Stul">
+            <h2>Dreveny styl</h2>
+            <p>Rozmery: 120 x 60 x 75 cm</p>
+            <p>Cena: 3490 Kc</p>
+            <button onclick="addToCart('Dreveny stul')">Pridat do kosiku</button>
+        </div>
 
-    <label>Email:</label>
-    <input value="">
+        <div class="product">
+            <img src="img/zidle.jpg" alt="Zidle">
+            <h2>Kuchynska zidle</h2>
+            <p>Rozměry: 45 x 40 x 90 cm</p>
+            <p>Cena: 990 Kc</p>
+            <button onclick="addToCart('Kuchynska zidle')">Pridat do kosiku</button>
+        </div>
 
-    <label>Adresa zákazníka:</label>
-    <input id="userAddress" value="">
+        <div class="product">
+            <img src="img/police.jpg" alt="Police">
+            <h2>Nastenna police</h2>
+            <p>Rozměry: 80 x 20 cm</p>
+            <p>Cena: 590 Kc</p>
+            <button onclick="addToCart('Nastenna police')">Pridat do kosiku</button>
+        </div>
+          <a href="purchase.html" class="cart-btn">
+        🛒 Košík (<span id="cartCount">0</span>)
+        </a>
 
-    <button onclick="sendOrder()">Odeslat objednávku</button>
+    </main>
 
-    <div id="result"></div>
-</div>
-
-<script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>

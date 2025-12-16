@@ -1,40 +1,50 @@
+const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+const cartList = document.getElementById("cartItems");
+cart.forEach(item => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    cartList.appendChild(li);
+});
+
 async function sendOrder() {
-    const shopAddress = document.getElementById("shopAddress").value;
-    const userAddress = document.getElementById("userAddress").value;
-    const items = document.getElementById("items").value.split(",").map(t => t.trim());
+    const firstName = document.getElementById("firstName").value;
+    const lastName = document.getElementById("lastName").value;
+    const email = document.getElementById("email").value;
+    const adress = document.getElementById("userAddress").value;
 
     const resultDiv = document.getElementById("result");
     resultDiv.innerHTML = "<p>Odesílám objednávku...</p>";
+
+    if (cart.length === 0) {
+        resultDiv.innerHTML = "<b>Košík je prázdný!</b>";
+        return;
+    }
 
     try {
         const res = await fetch("http://localhost:3000/order", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                shopAddress,
-                userAddress,
-                items
+                customer: {
+                    firstName,
+                    lastName,
+                    email
+                },
+                adress: adress,
+                furniture: cart
             })
         });
 
-        const data = await res.json();
-
-        if (data.error) {
-            resultDiv.innerHTML = `
-            <div class="result">
-                <b>Chyba:</b> ${data.error}
-            </div>`;
-            return;
-        }
-
         resultDiv.innerHTML = `
-        <div class="result">
-            <h3>Objednávka vytvořena!</h3>
-            <p><b>Vzdálenost:</b> ${data.distance} km</p>
-            <p><b>Zvolené auto:</b> ${data.chosenCar.name}</p>
-        </div>`;
-    }
-    catch (e) {
-        resultDiv.innerHTML = `<div class="result"><b>Chyba připojení k backendu.</b></div>`;
+            <div class="result">
+                <h3>Objednávka odeslána</h3>
+                <p>Děkujeme za nákup</p>
+            </div>
+        `;
+        localStorage.removeItem("cart");
+
+    } catch (e) {
+        resultDiv.innerHTML = "<b>Chyba při odesílání objednávky</b>";
     }
 }
