@@ -1,19 +1,40 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>E-shop – Košík</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div>E-shop – Nábytek</div>
+  <div>
+    <a href="index.html"><button>Produkty</button></a>
+    <button>Košík</button>
+  </div>
+</header>
+
 <div class="container">
-    <h2>Váš košík</h2>
+  <h2>Košík</h2>
 
-    <ul id="cartItems" class="cart-list"></ul>
+  <div id="cartItems"></div>
 
-    <h2>📦 Údaje zákazníka</h2>
+  <h3>Doručovací údaje</h3>
+  <input id="firstName" placeholder="Jméno">
+  <input id="lastName" placeholder="Příjmení">
+  <input id="email" placeholder="Email">
+  <input id="userAddress" placeholder="Ulice, město, PSČ">
 
-    <input id="firstName" placeholder="Jméno">
-    <input id="lastName" placeholder="Příjmení">
-    <input id="email" placeholder="Email">
-    <input id="userAddress" placeholder="Adresa">
-
+  <div class="order-buttons">
     <button onclick="sendOrder()">Odeslat objednávku</button>
+    <button class="secondary" onclick="newOrder()">Nová objednávka</button>
+  </div>
 
-    <div id="status"></div>
+  <div class="status" id="result"></div>
 </div>
 
-<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
 <script src="app.js"></script>
+</body>
+</html>

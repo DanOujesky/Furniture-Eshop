@@ -1,50 +1,61 @@
-const cart = JSON.parse(localStorage.getItem("cart")) || [];
+const socket = io();
+let currentOrderId = null;
 
-const cartList = document.getElementById("cartItems");
-cart.forEach(item => {
-    const li = document.createElement("li");
-    li.textContent = item;
-    cartList.appendChild(li);
+socket.on("orderUpdate", data => {
+  if (data.order_id === currentOrderId) {
+    document.getElementById("result").innerHTML +=
+      `<div>Stav objednávky: <b>${data.status}</b></div>`;
+  }
 });
 
 async function sendOrder() {
-    const firstName = document.getElementById("firstName").value;
-    const lastName = document.getElementById("lastName").value;
-    const email = document.getElementById("email").value;
-    const adress = document.getElementById("userAddress").value;
+  const firstName = document.getElementById("firstName").value;
+  const lastName = document.getElementById("lastName").value;
+  const email = document.getElementById("email").value;
+  const adress = document.getElementById("userAddress").value;
 
-    const resultDiv = document.getElementById("result");
-    resultDiv.innerHTML = "<p>Odesílám objednávku...</p>";
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const resultDiv = document.getElementById("result");
 
-    if (cart.length === 0) {
-        resultDiv.innerHTML = "<b>Košík je prázdný!</b>";
-        return;
-    }
+  if (cart.length === 0) {
+    resultDiv.innerHTML = "<b>Košík je prázdný!</b>";
+    return;
+  }
 
-    try {
-        const res = await fetch("http://localhost:3000/order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                customer: {
-                    firstName,
-                    lastName,
-                    email
-                },
-                adress: adress,
-                furniture: cart
-            })
-        });
+  resultDiv.innerHTML = "⏳ Odesílám objednávku...";
 
-        resultDiv.innerHTML = `
-            <div class="result">
-                <h3>Objednávka odeslána</h3>
-                <p>Děkujeme za nákup</p>
-            </div>
-        `;
-        localStorage.removeItem("cart");
+  const res = await fetch("/order", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      customer: { firstName, lastName, email },
+      adress,
+      furniture: cart
+    })
+  });
 
-    } catch (e) {
-        resultDiv.innerHTML = "<b>Chyba při odesílání objednávky</b>";
-    }
+  const data = await res.json();
+  currentOrderId = data.order_id;
+
+  resultDiv.innerHTML = `
+    Objednávka vytvořena<br>
+    ID: <b>${data.order_id}</b><br>
+    Čekám na stav objednávky...
+  `;
+
+  localStorage.removeItem("cart");
+}
+
+function newOrder() {
+  localStorage.removeItem("cart");
+
+  document.getElementById("cartItems").innerHTML = "";
+  document.getElementById("result").innerHTML = "";
+
+  document.getElementById("firstName").value = "";
+  document.getElementById("lastName").value = "";
+  document.getElementById("email").value = "";
+  document.getElementById("userAddress").value = "";
+
+  currentOrderId = null;
 }
