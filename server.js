@@ -111,7 +111,7 @@ io.on("connection", (socket) => {
   }
 
   adminSocket = socket;
-  console.log("✅ Admin connected:", socket.id);
+  console.log("Admin connected:", socket.id);
 
   socket.on("disconnect", () => {
     console.log("Admin disconnected");
