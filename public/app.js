@@ -9,9 +9,6 @@ socket.on("orderUpdate", data => {
 });
 
 async function sendOrder() {
-  const firstName = document.getElementById("firstName").value;
-  const lastName = document.getElementById("lastName").value;
-  const email = document.getElementById("email").value;
   const adress = document.getElementById("userAddress").value;
 
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -28,7 +25,6 @@ async function sendOrder() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      customer: { firstName, lastName, email },
       adress,
       furniture: cart
     })
