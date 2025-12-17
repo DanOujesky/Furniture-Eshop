@@ -1,15 +1,16 @@
 const socket = io();
 let currentOrderId = null;
 
-socket.on("orderUpdate", data => {
+socket.on("orderUpdate", (data) => {
   if (data.order_id === currentOrderId) {
-    document.getElementById("result").innerHTML +=
-      `<div>Stav objednávky: <b>${data.status}</b></div>`;
+    document.getElementById(
+      "result"
+    ).innerHTML += `<div>Stav objednávky: <b>${data.status}</b></div>`;
   }
 });
 
 async function sendOrder() {
-  const adress = document.getElementById("userAddress").value;
+  const address = document.getElementById("userAddress").value;
 
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const resultDiv = document.getElementById("result");
@@ -25,9 +26,9 @@ async function sendOrder() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      adress,
-      furniture: cart
-    })
+      address: address,
+      furniture: cart,
+    }),
   });
 
   const data = await res.json();

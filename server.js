@@ -23,17 +23,18 @@ let adminSocket = null;
 const schema = z.object({
   address: z.string().min(3),
 
-  furniture: z.object({
-    name: z.string().min(1),
-
-    dimensions: z.object({
-      width: z.number().positive(),
-      length: z.number().positive(),
-      height: z.number().positive(),
-    }),
-    weight: z.number().positive(),
-    count: z.number().positive(),
-  }),
+  furniture: z.array(
+    z.object({
+      name: z.string().min(1),
+      dimensions: z.object({
+        width: z.number().positive(),
+        length: z.number().positive(),
+        height: z.number().positive(),
+      }),
+      weight: z.number().positive(),
+      count: z.number().positive(),
+    })
+  ),
 });
 
 app.use(express.static("public"));

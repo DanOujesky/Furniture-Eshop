@@ -1,46 +1,44 @@
 <!DOCTYPE html>
 <html lang="cs">
-<head>
-  <meta charset="UTF-8">
-  <title>E-shop – Produkty</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>E-shop – Produkty</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <div>E-shop – Nábytek</div>
+      <div>
+        <a href="index.html"><button>Produkty</button></a>
+        <a href="purchase.html">
+          <button>Košík (<span id="cartCount">0</span>)</button>
+        </a>
+      </div>
+    </header>
 
-<header>
-  <div>E-shop – Nábytek</div>
-  <div>
-    <a href="index.html"><button>Produkty</button></a>
-    <a href="purchase.html">
-      <button>Košík (<span id="cartCount">0</span>)</button>
-    </a>
-  </div>
-</header>
+    <div class="container">
+      <h2>Produkty</h2>
 
-<div class="container">
-  <h2>Produkty</h2>
+      <div class="product">
+        <div>Židle</div>
+        <button onclick="addToCart('Židle')">Přidat</button>
+      </div>
 
-  <div class="product">
-    <div> Židle</div>
-    <button onclick="addToCart('Židle')">Přidat</button>
-  </div>
+      <div class="product">
+        <div>Sedačka</div>
+        <button onclick="addToCart('Sedačka')">Přidat</button>
+      </div>
 
-  <div class="product">
-    <div> Sedačka</div>
-    <button onclick="addToCart('Sedačka')">Přidat</button>
-  </div>
+      <div class="product">
+        <div>Postel</div>
+        <button onclick="addToCart('Postel')">Přidat</button>
+      </div>
 
-  <div class="product">
-    <div> Postel</div>
-    <button onclick="addToCart('Postel')">Přidat</button>
-  </div>
-
-  <div class="product">
-    <div> Skříň</div>
-    <button onclick="addToCart('Skříň')">Přidat</button>
-  </div>
-</div>
-
-<script src="script.js"></script>
-</body>
+      <div class="product">
+        <div>Skříň</div>
+        <button onclick="addToCart('Skříň')">Přidat</button>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
 </html>
