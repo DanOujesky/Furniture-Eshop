@@ -6,8 +6,8 @@ const PRODUCTS = {
     dimensions: { width: 45, length: 45, height: 90 },
     weight: 6
   },
-  "Sedačka": {
-    name: "Sedačka",
+  "Police": {
+    name: "Police",
     dimensions: { width: 200, length: 90, height: 85 },
     weight: 60
   },

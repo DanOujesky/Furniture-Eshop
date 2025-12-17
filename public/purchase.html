@@ -21,17 +21,52 @@
   <div id="cartItems" class="cart-list"></div>
 
   <section class="form">
-    <h2>Doručovací údaje</h2>
-    <input id="firstName" placeholder="Jméno">
-    <input id="lastName" placeholder="Příjmení">
-    <input id="email" placeholder="Email">
-    <input id="userAddress" placeholder="Ulice, město, PSČ">
-  </section>
+    <form onsubmit="sendOrder(); return false;" class="form">
+
+  <h2>Doručovací údaje</h2>
+
+  <input
+    id="firstName"
+    placeholder="Jméno"
+    required
+    pattern="[A-Z][a-z]+"
+    title="Jméno musí začínat velkým písmenem a obsahovat pouze písmena"
+  />
+
+  <input
+    id="lastName"
+    placeholder="Příjmení"
+    required
+    pattern="[A-Z][a-z]+"
+    title="Příjmení musí začínat velkým písmenem a obsahovat pouze písmena"
+  />
+
+  <input
+    id="email"
+    type="email"
+    placeholder="Email"
+    required
+    title="Zadejte platný email"
+  />
+
+  <input
+    id="userAddress"
+    placeholder="Ječná 30 Praha 120 00"
+    required
+    pattern="[A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽa-záčďéěíňóřšťúůýž\s]+ \d+ [A-ZÁČĎÉĚÍŇÓŘŠŤÚŮÝŽa-záčďéěíňóřšťúůýž\s]+ \d{3} \d{2}"
+    title="Adresa musí být ve formátu: Ječná 30 Praha 120 00"
+  />
 
   <div class="order-buttons">
-    <button onclick="sendOrder()">Odeslat objednávku</button>
-    <button class="secondary" onclick="newOrder()">Nová objednávka</button>
+    <button type="submit">Odeslat objednávku</button>
+    <button type="button" class="secondary" onclick="newOrder()">
+      Nová objednávka
+    </button>
   </div>
+
+</form>
+
+  </section>
 
   <div id="result" class="status"></div>
 </main>

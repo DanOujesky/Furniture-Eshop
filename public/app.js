@@ -31,7 +31,15 @@ async function sendOrder() {
     }),
   });
 
-  const data = await res.json();
+  if (!res.ok) {
+    const text = await res.text();
+    document.getElementById("result").innerHTML =
+        "<b>Chyba serveru:</b> " + text;
+    return;
+  }
+
+    const data = await res.json();
+
   currentOrderId = data.order_id;
 
   resultDiv.innerHTML = `
