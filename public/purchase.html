@@ -1,39 +1,43 @@
 <!DOCTYPE html>
 <html lang="cs">
-  <head>
-    <meta charset="UTF-8" />
-    <title>E-shop – Košík</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header>
-      <div>E-shop – Nábytek</div>
-      <div>
-        <a href="index.html"><button>Produkty</button></a>
-        <button>Košík</button>
-      </div>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <title>E-shop – Košík</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
-    <div class="container">
-      <h2>Košík</h2>
+<header class="topbar">
+  <div class="logo">Nábytek.cz</div>
+  <nav>
+    <a href="index.html">Produkty</a>
+    <a href="purchase.html" class="active">Košík</a>
+  </nav>
+</header>
 
-      <div id="cartItems"></div>
+<main class="container">
+  <h1>Košík</h1>
 
-      <h3>Doručovací údaje</h3>
-      <input id="firstName" placeholder="Jméno" />
-      <input id="lastName" placeholder="Příjmení" />
-      <input id="email" placeholder="Email" />
-      <input id="userAddress" placeholder="Ulice, město, PSČ" />
+  <div id="cartItems" class="cart-list"></div>
 
-      <div class="order-buttons">
-        <button onclick="sendOrder()">Odeslat objednávku</button>
-        <button class="secondary" onclick="newOrder()">Nová objednávka</button>
-      </div>
+  <section class="form">
+    <h2>Doručovací údaje</h2>
+    <input id="firstName" placeholder="Jméno">
+    <input id="lastName" placeholder="Příjmení">
+    <input id="email" placeholder="Email">
+    <input id="userAddress" placeholder="Ulice, město, PSČ">
+  </section>
 
-      <div class="status" id="result"></div>
-    </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="script.js"></script>
-    <script src="app.js"></script>
-  </body>
+  <div class="order-buttons">
+    <button onclick="sendOrder()">Odeslat objednávku</button>
+    <button class="secondary" onclick="newOrder()">Nová objednávka</button>
+  </div>
+
+  <div id="result" class="status"></div>
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="script.js"></script>
+<script src="app.js"></script>
+</body>
 </html>

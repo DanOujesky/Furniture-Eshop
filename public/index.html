@@ -1,44 +1,58 @@
 <!DOCTYPE html>
 <html lang="cs">
-  <head>
-    <meta charset="UTF-8" />
-    <title>E-shop – Produkty</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <header>
-      <div>E-shop – Nábytek</div>
-      <div>
-        <a href="index.html"><button>Produkty</button></a>
-        <a href="purchase.html">
-          <button>Košík (<span id="cartCount">0</span>)</button>
-        </a>
-      </div>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <title>E-shop – Nábytek</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
 
-    <div class="container">
-      <h2>Produkty</h2>
+<header class="topbar">
+  <div class="logo">Nábytek.cz</div>
+  <nav>
+    <a href="index.html" class="active">Produkty</a>
+    <a href="purchase.html">
+      Košík <span id="cartCount" class="badge">0</span>
+    </a>
+  </nav>
+</header>
 
-      <div class="product">
-        <div>Židle</div>
-        <button onclick="addToCart('Židle')">Přidat</button>
-      </div>
+<main class="container">
+  <h1>Naše produkty</h1>
 
-      <div class="product">
-        <div>Sedačka</div>
-        <button onclick="addToCart('Sedačka')">Přidat</button>
-      </div>
+  <div class="product-grid">
 
-      <div class="product">
-        <div>Postel</div>
-        <button onclick="addToCart('Postel')">Přidat</button>
-      </div>
-
-      <div class="product">
-        <div>Skříň</div>
-        <button onclick="addToCart('Skříň')">Přidat</button>
-      </div>
+    <div class="product-card">
+      <img src="img/zidle.jpg" alt="Židle">
+      <h3>Židle</h3>
+      <p>Kvalitní dřevěná židle</p>
+      <button onclick="addToCart('Židle')">Přidat do košíku</button>
     </div>
-    <script src="script.js"></script>
-  </body>
+
+    <div class="product-card">
+      <img src="img/sedacka.jpg" alt="Sedačka">
+      <h3>Sedačka</h3>
+      <p>Pohodlná sedačka</p>
+      <button onclick="addToCart('Sedačka')">Přidat do košíku</button>
+    </div>
+
+    <div class="product-card">
+      <img src="img/postel.jpg" alt="Postel">
+      <h3>Postel</h3>
+      <p>Manželská postel</p>
+      <button onclick="addToCart('Postel')">Přidat do košíku</button>
+    </div>
+
+    <div class="product-card">
+      <img src="img/skrin.jpg" alt="Skříň">
+      <h3>Skříň</h3>
+      <p>Prostorná skříň</p>
+      <button onclick="addToCart('Skříň')">Přidat do košíku</button>
+    </div>
+
+  </div>
+</main>
+
+<script src="script.js"></script>
+</body>
 </html>

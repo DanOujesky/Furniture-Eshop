@@ -20,7 +20,7 @@ async function sendOrder() {
     return;
   }
 
-  resultDiv.innerHTML = "⏳ Odesílám objednávku...";
+  resultDiv.innerHTML = "Odesílám objednávku...";
 
   const res = await fetch("/order", {
     method: "POST",
