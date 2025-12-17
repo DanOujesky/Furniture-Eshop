@@ -31,8 +31,8 @@ const schema = z.object({
       length: z.number().positive(),
       height: z.number().positive(),
     }),
-
     weight: z.number().positive(),
+    count: z.number().positive(),
   }),
 });
 
