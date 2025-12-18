@@ -2,16 +2,16 @@ const socket = io();
 let currentOrderId = null;
 
 socket.on("orderUpdate", (data) => {
-  if (data.order_id === currentOrderId) {
-    document.getElementById(
-      "result"
-    ).innerHTML += `<div>Stav objednávky: <b>${data.status}</b></div>`;
-  }
+  console.log("ORDER UPDATE:", data.status);
+
+  const resultDiv = document.getElementById("result");
+
+  resultDiv.innerHTML = data.status;
 });
+
 
 async function sendOrder() {
   const address = document.getElementById("userAddress").value;
-
   const cart = JSON.parse(localStorage.getItem("cart")) || [];
   const resultDiv = document.getElementById("result");
 
@@ -26,27 +26,20 @@ async function sendOrder() {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      address: address,
+      address,
       furniture: cart,
+      socket_id: socket.id
     }),
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    document.getElementById("result").innerHTML =
-        "<b>Chyba serveru:</b> " + text;
+    resultDiv.innerHTML = "<b>Chyba serveru</b>";
     return;
   }
 
-    const data = await res.json();
+  const data = await res.json();
 
   currentOrderId = data.order_id;
-
-  resultDiv.innerHTML = `
-    Objednávka vytvořena<br>
-    ID: <b>${data.order_id}</b><br>
-    Čekám na stav objednávky...
-  `;
 
   localStorage.removeItem("cart");
 }

@@ -21,6 +21,7 @@ const processedEvents = new Set();
 
 const schema = z.object({
   address: z.string().min(3),
+  socket_id: z.string(),
 
   furniture: z.array(
     z.object({
@@ -32,13 +33,14 @@ const schema = z.object({
       }),
       weight: z.number().positive(),
       count: z.number().positive(),
+      
     })
   ),
 });
 
 app.use(express.static("public"));
 
-app.use(express.json());
+
 
 app.post(
   "/order/update",
@@ -47,6 +49,7 @@ app.post(
 );
 
 function handleWebhook(req, res) {
+  console.log("prislo");
   const signature = req.get("X-Signature") || "";
   const rawBody = req.body;
 
@@ -68,21 +71,28 @@ function handleWebhook(req, res) {
   const data = JSON.parse(rawBody.toString("utf8"));
   const { event_id, order_id, status } = data;
 
-  order = orders.get(event_id);
+
 
   if (processedEvents.has(event_id)) {
     return res.sendStatus(200);
   }
 
   processedEvents.add(event_id);
+  const order = orders.get(order_id);
 
   if (order) {
-    socket.to(order.socket_id).emit("orderUpdate", { order_id, status });
+    io.to(order.socket_id).emit("orderUpdate", {
+      order_id,
+      status,
+    });
+    console.log("odeslano na frontend");
   }
+ 
 
   res.sendStatus(200);
 }
 
+app.use(express.json());
 app.post("/order", async (req, res) => {
   const validation = schema.safeParse(req.body);
   if (!validation.success) {
@@ -103,6 +113,7 @@ app.post("/order", async (req, res) => {
     address: address,
     furniture: furniture,
   };
+  console.log(payload);
 
   const signature = crypto
     .createHmac("sha256", SHARED_SECRET)
