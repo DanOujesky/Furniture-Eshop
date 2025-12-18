@@ -1,7 +1,8 @@
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   margin: 0;
-  background: #f4f6f8;
+  background: linear-gradient(135deg, #f0f4f8, #d9e2ec);
+  color: #1f2937;
 }
 
 .topbar {
@@ -11,17 +12,24 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 
 .logo {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
 }
 
 nav a {
   color: white;
   text-decoration: none;
-  margin-left: 15px;
+  margin-left: 20px;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  color: #60a5fa;
 }
 
 nav a.active {
@@ -33,11 +41,12 @@ nav a.active {
   padding: 2px 6px;
   border-radius: 10px;
   font-size: 12px;
+  margin-left: 5px;
 }
 
 .container {
   padding: 30px;
-  max-width: 1100px;
+  max-width: 1200px;
   margin: auto;
 }
 
@@ -50,9 +59,15 @@ nav a.active {
 .product-card {
   background: white;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.12);
 }
 
 .product-card img {
@@ -66,13 +81,16 @@ button {
   background: #2563eb;
   color: white;
   border: none;
-  padding: 10px 14px;
-  border-radius: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s;
 }
 
 button:hover {
-  opacity: 0.9;
+  background: #1d4ed8;
+  transform: translateY(-2px);
 }
 
 button.secondary {
@@ -84,35 +102,46 @@ button.danger {
   color: white;
   font-size: 18px;
   padding: 8px 6px;
-
+  border-radius: 50%;
 }
 
 .cart-item {
   background: white;
-  padding: 15px;
-  margin-bottom: 10px;
+  padding: 18px;
+  margin-bottom: 12px;
   display: flex;
   justify-content: space-between;
-  border-radius: 8px;
+  align-items: center;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
 .cart-actions button {
   margin-left: 5px;
 }
 
-input {
+input, select, textarea {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 8px;
   border: 1px solid #ccc;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  outline: none;
 }
 
 .status {
   margin-top: 20px;
   padding: 15px;
   background: #eef2ff;
-  border-radius: 8px;
+  border-radius: 12px;
+  font-weight: 500;
 }
 
 @keyframes shake {
@@ -156,15 +185,15 @@ body.meme-shake {
 
 .hand.left {
   left: 20px;
-  width: 340px;
-  height: 340px;
+  width: 360px;
+  height: 360px;
   animation: leftHandMove 0.6s infinite ease-in-out;
 }
 
 .hand.right {
   right: 20px;
-  width: 340px;
-  height: 340px;
+  width: 360px;
+  height: 360px;
   animation: rightHandMove 0.6s infinite ease-in-out;
 }
 
@@ -180,4 +209,23 @@ body.meme-shake {
   100% { transform: translateY(-180px); }
 }
 
+@media (max-width: 1024px) {
+  .topbar { padding: 12px 20px; }
+  .logo { font-size: 20px; }
+  .product-card img { height: 140px; }
+  button { padding: 8px 14px; font-size: 14px; }
+}
 
+@media (max-width: 768px) {
+  .container { padding: 20px; }
+  .product-grid { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 18px; }
+  .product-card img { height: 120px; }
+}
+
+@media (max-width: 480px) {
+  .topbar { flex-direction: column; align-items: flex-start; padding: 10px 15px; }
+  nav a { margin-left: 0; margin-top: 5px; }
+  .product-grid { grid-template-columns: 1fr; gap: 15px; }
+  .product-card img { height: 100px; }
+  button { width: 100%; padding: 10px; }
+}
