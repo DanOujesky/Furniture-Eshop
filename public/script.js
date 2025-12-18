@@ -30,6 +30,9 @@ function updateCartCount() {
 
   const totalCount = cart.reduce((sum, item) => sum + item.count, 0);
   cartCountSpan.textContent = totalCount;
+  if (totalCount === 67 && !window.memeActive) {
+    trigger67Meme();
+  }
 }
 
 function removeOne(index) {
@@ -95,6 +98,43 @@ function renderCart() {
     cartItemsDiv.appendChild(div);
   });
 }
+
+function trigger67Meme() {
+  const leftHand = document.createElement("img");
+  leftHand.src = "img/LeftHand.png";
+  leftHand.className = "hand left";
+
+  const rightHand = document.createElement("img");
+  rightHand.src = "img/RightHand.png";
+  rightHand.className = "hand right";
+
+  document.body.appendChild(leftHand);
+  document.body.appendChild(rightHand);
+  window.memeActive = true;
+
+  document.body.classList.add("meme-shake");
+
+  const bars = [];
+  const barCount = Math.floor(Math.random() * 5) + 3;
+
+  for (let i = 0; i < barCount; i++) {
+    const bar = document.createElement("div");
+    bar.className = "rainbow-bar";
+    bar.style.top = Math.random() * window.innerHeight + "px";
+    bar.style.opacity = Math.random().toFixed(2);
+    document.body.appendChild(bar);
+    bars.push(bar);
+  }
+
+  setTimeout(() => {
+  document.body.classList.remove("meme-shake");
+  bars.forEach(bar => bar.remove());
+  leftHand.remove();
+  rightHand.remove();
+  window.memeActive = false;
+  }, 3000);
+}
+
 
 renderCart();
 updateCartCount();

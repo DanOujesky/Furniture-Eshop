@@ -114,3 +114,70 @@ input {
   background: #eef2ff;
   border-radius: 8px;
 }
+
+@keyframes shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-5px, 5px); }
+  40% { transform: translate(5px, -5px); }
+  60% { transform: translate(-5px, -5px); }
+  80% { transform: translate(5px, 5px); }
+  100% { transform: translate(0, 0); }
+}
+
+body.meme-shake {
+  animation: shake 0.15s infinite;
+}
+
+.rainbow-bar {
+  position: fixed;
+  width: 100%;
+  height: 25px;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    red, orange, yellow, green, cyan, blue, violet
+  );
+  z-index: 9999;
+  animation: slide 1s linear infinite;
+}
+
+@keyframes slide {
+  from { background-position: 0% }
+  to { background-position: 200% }
+}
+
+.hand {
+  position: fixed;
+  bottom: 0;
+  image-rendering: pixelated;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+.hand.left {
+  left: 20px;
+  width: 340px;
+  height: 340px;
+  animation: leftHandMove 0.6s infinite ease-in-out;
+}
+
+.hand.right {
+  right: 20px;
+  width: 340px;
+  height: 340px;
+  animation: rightHandMove 0.6s infinite ease-in-out;
+}
+
+@keyframes leftHandMove {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-180px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes rightHandMove {
+  0%   { transform: translateY(-180px); }
+  50%  { transform: translateY(0); }
+  100% { transform: translateY(-180px); }
+}
+
+
