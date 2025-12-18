@@ -18,7 +18,6 @@ const io = new Server(server, {
 
 const orders = new Map();
 const processedEvents = new Set();
-let adminSocket = null;
 
 const schema = z.object({
   address: z.string().min(3),
@@ -69,15 +68,16 @@ function handleWebhook(req, res) {
   const data = JSON.parse(rawBody.toString("utf8"));
   const { event_id, order_id, status } = data;
 
+  order = orders.get(event_id);
+
   if (processedEvents.has(event_id)) {
     return res.sendStatus(200);
   }
 
   processedEvents.add(event_id);
-  orders.set(order_id, status);
 
-  if (adminSocket) {
-    adminSocket.emit("orderUpdate", { order_id, status });
+  if (order) {
+    socket.to(order.socket_id).emit("orderUpdate", { order_id, status });
   }
 
   res.sendStatus(200);
@@ -88,15 +88,17 @@ app.post("/order", async (req, res) => {
   if (!validation.success) {
     return res.status(400).json({ error: validation.error.errors });
   }
-  const { address, furniture } = validation.data;
+  const { address, furniture, socket_id } = validation.data;
   console.log("Received order:", { address, furniture });
 
   const order_id = crypto.randomUUID();
   const event_id = crypto.randomUUID();
 
+  orders.set(order_id, {socket_id: socket_id, status: ""})
+
   const payload = {
-    order_id,
-    event_id,
+    order_id: order_id,
+    event_id: event_id,
     callbackUrl: `${ESHOP_URL}:${ESHOP_PORT}/order/update`,
     address: address,
     furniture: furniture,
@@ -128,17 +130,11 @@ app.post("/order", async (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  if (adminSocket) {
-    socket.disconnect(true);
-    return;
-  }
 
-  adminSocket = socket;
-  console.log("Admin connected:", socket.id);
+  console.log("connected:", socket.id);
 
   socket.on("disconnect", () => {
-    console.log("Admin disconnected");
-    adminSocket = null;
+    console.log("isconnected", socket.id);
   });
 });
 
